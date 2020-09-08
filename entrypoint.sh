@@ -5,34 +5,28 @@ set -x
 DOCKER_IMAGE=retzero/tizen-studio:3.7-5.5
 CONTAINER_NAME=builder_ct
 
-## command
-#$1
-## source
-#$2 working_directory
-## package
-#$3 strip
-#$4 output
-#$5 reference
-#$6 security_profile
-#$7 packaging_type
-## build-native
-#$8 build_mode
-#$9 architecture
-#$10 compiler
-#$11 symbol
-#$12 extra_option
-#$13 jobs
-#$14 rootstrap_name
-#$15 strip
-## build-web
-#$16 exclude
-#$17 optimize
-## security-profile
-#$18 cert_name
-#$19 author_cert_path
-#$20 author_certi_pass
-#$21 distributor_cert_path
-#$22 distributor_certi_pass
+case "$1" in
+build-native) echo "Build Native"
+  build_mode=""; if [ ! -z $8 ]; then build_mode="-C $8"; fi
+  architecture=""; if [ ! -z $9 ]; then architecture="-a $9"; fi
+  compiler=""; if [ ! -z ${10} ]; then architecture="-c ${10}"; fi
+  rootstrap=""; if [ ! -z ${14} ]; then rootstrap="-r ${14}"; fi
+  ;;
+build-web) echo "Build Web"
+  ;;
+package) echo "Package"
+  strip=""; if [ ! -z ${3} ]; then strip="--strip ${3}"; fi
+  output=""; if [ ! -z ${4} ]; then output="--output ${4}"; fi
+  reference=""; if [ ! -z ${5} ]; then reference="--reference ${5}"; fi
+  security_profile=""; if [ ! -z ${6} ]; then security_profile="--sign ${6}"; fi
+  packaging_type=""; if [ ! -z ${7} ]; then packaging_type="--type ${7}"; fi
+  ;;
+security-profiles) echo "Security Profiles"
+  ;;
+list_rootstrap) echo "List Rootstrap"
+  ;;
+*) echo " $1 : Not processed"
+  ;;
 
 
 docker pull ${DOCKER_IMAGE}
@@ -42,7 +36,7 @@ docker run -id --name ${CONTAINER_NAME} --workdir ${GITHUB_WORKSPACE} ${DOCKER_I
 # FIXME: Try volume mounting instead of copy files.
 docker cp ${GITHUB_WORKSPACE}/. ${CONTAINER_NAME}:${GITHUB_WORKSPACE}
 
-docker exec -i ${CONTAINER_NAME} tizen ${1} -r ${14} -C ${8} -c ${10} -a ${9} -- ${GITHUB_WORKSPACE}
+docker exec -i ${CONTAINER_NAME} tizen ${1} ${rootstrap} ${build_mode} ${compiler} ${architecture} -- ${GITHUB_WORKSPACE}/${2}
 
 docker stop ${CONTAINER_NAME}
 

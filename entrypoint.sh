@@ -42,7 +42,7 @@ docker run -id --name ${CONTAINER_NAME} --workdir ${GITHUB_WORKSPACE} ${DOCKER_I
 # FIXME: Try volume mounting instead of copy files.
 docker cp ${GITHUB_WORKSPACE}/. ${CONTAINER_NAME}:${GITHUB_WORKSPACE}
 
-docker exec -i ${CONTAINER_NAME} tizen ${1} -r ${14} -C ${8} -c ${10} -a ${9} -- ${2}
+docker exec -i ${CONTAINER_NAME} tizen ${1} -r ${14} -C ${8} -c ${10} -a ${9} -- ${GITHUB_WORKSPACE}
 
 docker stop ${CONTAINER_NAME}
 

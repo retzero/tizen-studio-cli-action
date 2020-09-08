@@ -28,19 +28,22 @@ CLI tool for Tizen Studio
 | distributor_certi_pass | **security-profiles** distributor certificate password.  |   |  String |   |
 
 
-
 ## Example
 
 ### Build basics
 
 ```yaml  
- steps:
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Run build
-      uses: retzero/tizen-studio-cli-action@master
-      with:  
-        command: "build-native"
+      - name: Build package with Tizen Studio
+        uses: retzero/tizen-studio-cli-action@dev
+        with:
+          command: "build-native"
+          rootstrap_name: "mobile-5.5-device.core"
+          build_mode: "Debug"
+          compiler: "llvm"
+          architecture: "arm"
+          working_directory: "${{ github.workspace }}"
 ```
-

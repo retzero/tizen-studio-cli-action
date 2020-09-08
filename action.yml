@@ -1,0 +1,129 @@
+name: Tizen Studio CLI
+description: Command-line interface for Tizen Studio
+author: Hyokeun Jeon <hyokeun@gmail.com>
+branding:
+  icon: 'aperture'
+  color: 'purple'
+
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    ## command
+    - ${{ inputs.command }}
+    ## source 
+    - ${{ inputs.working_directory }}
+    ## package
+    - ${{ inputs.strip }}
+    - ${{ inputs.output }}
+    - ${{ inputs.reference }}
+    - ${{ inputs.security_profile }}
+    - ${{ inputs.packaging_type }}
+    ## build-native
+    - ${{ inputs.build_mode }}
+    - ${{ inputs.architecture }}
+    - ${{ inputs.compiler }}
+    - ${{ inputs.symbol }}
+    - ${{ inputs.extra_option }}
+    - ${{ inputs.jobs }}
+    - ${{ inputs.rootstrap_name }}
+    - ${{ inputs.strip }}
+    ## build-web
+    - ${{ inputs.exclude }}
+    - ${{ inputs.optimize }}
+    ## security-profile
+    - ${{ inputs.cert_name }}
+    - ${{ inputs.author_cert_path }}
+    - ${{ inputs.author_certi_pass }}
+    - ${{ inputs.distributor_cert_path }}
+    - ${{ inputs.distributor_certi_pass }}
+
+inputs:
+  ## global options
+  debug:
+    description: debug output
+    required: false
+    default: false
+
+  ## Command
+  command:
+    description: command (build-native|build-web|package|security-profiles|list_rootstrap)
+    required: true
+
+  ## source directory
+  working_directory:
+    description: where the base directory is for.
+    required: false
+    default: ""
+
+  ## package
+  strip:
+    description: strip the native binary. (on|off)
+    required: false
+    default: "off"
+  output:
+    description: output file path.
+    required: false
+  reference:
+    description: reference project paths for HybridApp package.
+    required: false
+  security_profile:
+    description: security profile name.
+    required: false
+  packaging_type:
+    description: packaging type. (tpk|wgt)
+    required: false
+
+  ## build-native
+  build_mode:
+    description: build mode. (Debug|Release)
+    required: false
+    default: "Debug"
+  architecture:
+    description: architecture type. (x86|x86_64|arm|aarch64)
+    required: false
+    default: "x86"
+  compiler:
+    description: compiler choice. (gcc|llvm)
+    required: false
+    default: "llvm"
+  symbol:
+    description: predefined symbol.
+    required: false
+  extra_option:
+    description: extra build options. (asan|lsan|...)
+    required: false
+  jobs:
+    description: number of parallel bulids for the native app.
+    required: false
+  rootstrap_name:
+    description: rootstrap name.
+    required: false
+
+  ## build-web
+  exclude:
+    description: list of exclude files by patterns.
+    required: false
+  optimize:
+    description: optimize the application size.
+    required: false
+
+  ## clean
+
+  ## security-profiles
+  cert_name:
+    description: certificate profile name
+    required: false
+  author_cert_path:
+    description: author certificate path.
+    required: false
+  distributor_cert_path:
+    description: distributor certificate path.
+    required: false
+  author_certi_pass:
+    description: author certificate password.
+    required: false
+  distributor_certi_pass:
+    description: distributor certificate password.
+    required: false
+
